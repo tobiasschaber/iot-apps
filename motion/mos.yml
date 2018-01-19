@@ -1,0 +1,33 @@
+author: Tobias Schaber, codecentric AG
+description: Software for running motion sensor with status led
+version: 1.0
+
+libs_version: ${mos.version}
+modules_version: ${mos.version}
+mongoose_os_version: ${mos.version}
+
+tags:
+  - c
+
+sources:
+  - src
+
+filesystem:
+  - fs
+
+config_schema:
+  - ["app", "o", {title: "custom pin settings"}]
+  - ["app.sensor", "i", 13, {title: "motion sensor pin"}]
+  - ["app.led", "i", 12, {title: "led pin"}]
+  - ["app.pullFrequenceMs", "i", 250, {title: "pull frequence in ms"}]
+
+libs:
+  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
+  - origin: https://github.com/mongoose-os-libs/rpc-uart
+  - origin: https://github.com/mongoose-os-libs/ca-bundle  
+#  - origin: https://github.com/mongoose-os-libs/aws
+  - origin: https://github.com/mongoose-os-libs/wifi
+
+# Used by the mos tool to catch mos binaries incompatible with this file format
+manifest_version: 2017-05-18
