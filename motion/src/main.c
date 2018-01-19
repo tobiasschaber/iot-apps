@@ -1,37 +1,52 @@
 #include "mgos.h"
 
+/* pin layout */
 int pinSensor;
 int pinLed;
+
+/* the global cycle frequence */
 int pullFrequenceMs;
 
-void updateMotionStatus(bool);
+/* the second when the last movement was detected */
+int timeOfLastMovement = -10;
+
+void processSensorSignal(bool);
 
 
 static void timer_cb(void *arg) {
     //LOG(LL_INFO, ("XXXXX"));
-    printf("Lese auf Pin: %d\n", pinSensor);
+    //printf("Lese auf Pin: %d\n", pinSensor);
 
     bool result = mgos_gpio_read(pinSensor);
-    updateMotionStatus(result);
+    processSensorSignal(result);
 
   (void) arg;
 }
 
 
 /* method handling movement changes */
-void updateMotionStatus(bool motionDetected) {
+void processSensorSignal(bool motionDetected) {
 
     int currentTime = time(NULL);
 
+    printf("---------------------------------\n");
     printf("Uhrzeit: %d\n", currentTime);
+    printf("Last Movement: %d\n", timeOfLastMovement);
+    printf("Movement: %d\n", motionDetected);
 
-    if (motionDetected == true) {
-        mgos_gpio_write(pinLed, 1);
-    } else {
+    if(currentTime >= (timeOfLastMovement + 0)) {
+
+        if (motionDetected == true) {
+            timeOfLastMovement = currentTime;
+            printf("Result: SWITCH ON\n\n");
+            mgos_gpio_write(pinLed, 1);
+        } else {
+        printf("Result: SWITCH OFF\n\n");
         mgos_gpio_write(pinLed, 0);
+        }
+    } else {
+    printf("Result: NOTHING\n\n");
     }
-
-       printf("Ergebnis: %d\n", motionDetected);
 }
 
 
