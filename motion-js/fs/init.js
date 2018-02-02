@@ -1,17 +1,22 @@
+/*
+ * set the HC-SR501 sensor to repeatable trigger mode.
+ */
+
 load('api_config.js');
 load('api_aws.js');
 load('api_gpio.js');
 load('api_timer.js');
 
+/* read configuration */
 let sensorPin = Cfg.get('app.sensorPin');
 let ledPin = Cfg.get('app.ledPin');
-//let sensorPin = 13;
-//let ledPin = 12;
-let frequencyMs = 3500;
+let frequencyMs = Cfg.get('app.pollFrequency');
 let buttonPin = 0;
 
+/* state document which is used in the thing shadow */
 let state = { motionDetected: false };
 
+/* set up pins */
 GPIO.set_mode(sensorPin, GPIO.MODE_INPUT);
 GPIO.set_mode(ledPin, GPIO.MODE_OUTPUT);
 
